@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arian Alipour — Portfolio</title>
+<style>
+  :root{
+    --charcoal-950:#101012;
+    --charcoal-900:#1a1a1d;
+    --charcoal-800:#232327;
+    --pearl-100:#eae6df;
+    --pearl-60: rgba(234,230,223,0.6);
+    --moon-silver:#9aa3ad;
+    --shell-clay:#8a3a2c;
+    --shell-clay-bright:#a8462f;
+    --shell-clay-dim: rgba(138,58,44,0.35);
+    --hair: rgba(234,230,223,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--charcoal-950);
+    color:var(--pearl-100);
+    font-family:"Helvetica Neue","Helvetica","Arial",sans-serif;
+    font-weight:300;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  button{font-family:inherit;}
+
+  /* ---------- film grain overlay, whole page ---------- */
+  .grain{
+    position:fixed; inset:0; z-index:3; pointer-events:none; opacity:.05;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ---------- ambient blobs ---------- */
+  .moon-glow{
+    position:fixed;
+    top:-18vw;
+    left:-10vw;
+    width:46vw;
+    height:46vw;
+    border-radius:42% 58% 65% 35% / 45% 40% 60% 55%;
+    background:radial-gradient(circle at 40% 40%, rgba(234,230,223,0.14), rgba(234,230,223,0.03) 55%, transparent 72%);
+    filter:blur(2px);
+    pointer-events:none;
+    z-index:0;
+    animation:drift 22s ease-in-out infinite alternate;
+  }
+  .moon-glow.two{
+    top:auto; left:auto; right:-14vw; bottom:-16vw;
+    width:34vw; height:34vw;
+    background:radial-gradient(circle at 60% 60%, rgba(138,58,44,0.12), rgba(138,58,44,0.02) 55%, transparent 72%);
+    border-radius:60% 40% 35% 65% / 55% 65% 35% 45%;
+    animation-duration:30s;
+    animation-direction:alternate-reverse;
+  }
+  @keyframes drift{
+    0%{ transform: translate(0,0) rotate(0deg); border-radius:42% 58% 65% 35% / 45% 40% 60% 55%; }
+    50%{ transform: translate(1.5vw, 2vw) rotate(8deg); border-radius:58% 42% 40% 60% / 50% 60% 40% 50%; }
+    100%{ transform: translate(2vw, 3vw) rotate(0deg); border-radius:42% 58% 65% 35% / 45% 40% 60% 55%; }
+  }
+
+  /* ---------- header / nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 6vw;
+  }
+  .brand{
+    font-size:14px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--pearl-100);
+  }
+  .burger{
+    width:34px; height:22px; position:relative; cursor:pointer; z-index:60;
+    background:none; border:none;
+  }
+  .burger span{
+    position:absolute; left:0; width:100%; height:1px; background:var(--pearl-100);
+    transition:all .35s ease;
+  }
+  .burger span:nth-child(1){top:0;}
+  .burger span:nth-child(2){top:10px; width:70%;}
+  .burger span:nth-child(3){top:20px;}
+  .burger.open span:nth-child(1){transform:translateY(10px) rotate(45deg);}
+  .burger.open span:nth-child(2){opacity:0;}
+  .burger.open span:nth-child(3){transform:translateY(-10px) rotate(-45deg); width:100%;}
+
+  .nav-overlay{
+    position:fixed; inset:0; background:var(--charcoal-950); z-index:55;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; transition:opacity .5s ease;
+  }
+  .nav-overlay.open{opacity:1; visibility:visible;}
+  .nav-overlay nav{
+    display:flex; flex-direction:column; gap:28px; text-align:center;
+  }
+  .nav-overlay a{
+    font-size:clamp(28px,5vw,46px);
+    font-weight:200;
+    color:var(--pearl-100);
+    position:relative;
+    display:inline-block;
+    transition:color .3s ease, transform .3s ease;
+  }
+  .nav-overlay a span{
+    display:block; font-size:12px; letter-spacing:.2em; color:var(--shell-clay);
+    margin-top:6px; font-weight:400;
+  }
+  .nav-overlay a:hover{color:var(--shell-clay); transform:translateY(-3px);}
+
+  /* ---------- hero with video ---------- */
+  .hero{
+    min-height:100vh;
+    position:relative;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:0 6vw 90px;
+    overflow:hidden;
+  }
+  .hero video{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    z-index:0; opacity:.55;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(16,16,18,.35) 0%, rgba(16,16,18,.15) 40%, rgba(16,16,18,.92) 100%);
+  }
+  .hero .eyebrow, .hero h1, .hero p, .scroll-cue{ position:relative; z-index:2; }
+  .hero .eyebrow{
+    font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--moon-silver); margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(42px,9.5vw,120px);
+    font-weight:200;
+    letter-spacing:-0.01em;
+    color:var(--pearl-100);
+    line-height:0.98;
+  }
+  .hero h1 em{ font-style:normal; color:var(--shell-clay); }
+  .hero p{
+    max-width:520px;
+    margin-top:26px;
+    color:var(--moon-silver);
+    font-size:16px;
+    font-weight:300;
+  }
+  .scroll-cue{
+    position:absolute; bottom:40px; right:6vw;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  .scroll-cue span{
+    font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--moon-silver);
+  }
+  .scroll-cue .drop{
+    width:1px; height:46px;
+    background:linear-gradient(to bottom, var(--shell-clay), transparent);
+    position:relative; overflow:hidden;
+  }
+  .scroll-cue .drop::after{
+    content:""; position:absolute; top:-46px; left:0; width:1px; height:46px;
+    background:var(--pearl-100);
+    animation:drip 2.4s ease-in-out infinite;
+  }
+  @keyframes drip{ 0%{ top:-46px; } 100%{ top:46px; } }
+  @media(max-width:700px){ .scroll-cue{display:none;} }
+
+  /* ---------- section shell ---------- */
+  section{
+    position:relative; z-index:1;
+    padding:130px 6vw;
+    border-top:1px solid var(--hair);
+  }
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:48px; flex-wrap:wrap; gap:16px;
+  }
+  .section-head .tag{
+    font-size:12px; letter-spacing:.28em; text-transform:uppercase; color:var(--shell-clay);
+  }
+  .section-head h2{
+    font-size:clamp(30px,4vw,52px); font-weight:200; margin-top:10px; font-style:italic;
+  }
+  .section-head .count{ font-size:13px; color:var(--moon-silver); }
+
+  /* ---------- collection filter (gallery wall labels) ---------- */
+  .filters{
+    display:flex; flex-wrap:wrap; gap:10px 28px;
+    margin-bottom:56px;
+    border-top:1px solid var(--hair); border-bottom:1px solid var(--hair);
+    padding:18px 0;
+  }
+  .filters button{
+    background:none; border:none; color:var(--moon-silver);
+    font-size:13px; letter-spacing:.12em; text-transform:uppercase;
+    cursor:pointer; padding:4px 0; position:relative;
+    transition:color .3s ease;
+  }
+  .filters button::after{
+    content:""; position:absolute; left:0; bottom:-2px; width:0; height:1px;
+    background:var(--shell-clay); transition:width .3s ease;
+  }
+  .filters button.active, .filters button:hover{ color:var(--pearl-100); }
+  .filters button.active::after{ width:100%; }
+  .filters .num{ color:var(--shell-clay); font-size:11px; margin-left:4px; }
+
+  /* ---------- artworks — minimal gallery wall ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+  }
+  .art{
+    position:relative;
+    aspect-ratio:4/5;
+    background:var(--charcoal-900);
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform .5s cubic-bezier(.16,1,.3,1), opacity .4s ease;
+  }
+  .art .swatch{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--c1), var(--c2) 60%, var(--charcoal-950));
+    transition:transform .9s cubic-bezier(.16,1,.3,1), filter .5s ease;
+    filter:grayscale(.15);
+  }
+  .art:hover .swatch{ transform:scale(1.05); filter:grayscale(0); }
+  .art.hidden{ display:none; }
+  .art.fade-out{ opacity:0; transform:scale(.97); }
+
+  @media(max-width:900px){ .grid{grid-template-columns:repeat(2,1fr); gap:18px;} }
+  @media(max-width:560px){ .grid{grid-template-columns:1fr;} }
+
+  /* ---------- lightbox ---------- */
+  .lightbox{
+    position:fixed; inset:0; z-index:80; background:rgba(16,16,18,0.97);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; transition:opacity .4s ease;
+    padding:6vw;
+  }
+  .lightbox.open{ opacity:1; visibility:visible; }
+  .lightbox .frame{ max-width:720px; width:100%; }
+  .lightbox .swatch-big{
+    width:100%; aspect-ratio:4/5;
+    background:linear-gradient(160deg, var(--c1), var(--c2) 60%, var(--charcoal-950));
+  }
+  .lightbox .info{ margin-top:22px; display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
+  .lightbox .info .n{ font-size:20px; font-weight:300; font-style:italic; }
+  .lightbox .info .y{ font-size:13px; color:var(--moon-silver); }
+  .lightbox .close{
+    position:absolute; top:32px; right:6vw; background:none; border:none; color:var(--pearl-100);
+    font-size:14px; letter-spacing:.14em; text-transform:uppercase; cursor:pointer;
+  }
+
+  /* ---------- about ---------- */
+  .about-wrap{
+    display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;
+  }
+  .about-wrap .orb{
+    aspect-ratio:1;
+    border-radius:62% 38% 45% 55% / 55% 45% 55% 45%;
+    background:radial-gradient(circle at 35% 30%, var(--pearl-100), var(--shell-clay) 45%, var(--charcoal-900) 78%);
+    max-width:360px;
+    box-shadow:0 0 100px rgba(138,58,44,0.1);
+    animation:blob-morph 14s ease-in-out infinite alternate;
+  }
+  @keyframes blob-morph{
+    0%{ border-radius:62% 38% 45% 55% / 55% 45% 55% 45%; }
+    50%{ border-radius:40% 60% 60% 40% / 45% 55% 45% 55%; }
+    100%{ border-radius:62% 38% 45% 55% / 55% 45% 55% 45%; }
+  }
+  .about-wrap p{color:var(--moon-silver); font-size:17px; margin-bottom:18px; max-width:520px;}
+  .about-wrap strong{color:var(--pearl-100); font-weight:400;}
+  @media(max-width:800px){ .about-wrap{grid-template-columns:1fr;} .about-wrap .orb{order:-1; margin:0 auto 20px;} }
+
+  /* ---------- exhibitions timeline ---------- */
+  .timeline{border-top:1px solid var(--hair);}
+  .t-row{
+    display:grid; grid-template-columns:120px 1fr 200px;
+    gap:24px; padding:28px 0; border-bottom:1px solid var(--hair);
+    align-items:baseline;
+  }
+  .t-row .year{color:var(--shell-clay); font-size:15px;}
+  .t-row .title{font-size:19px; font-weight:300; color:var(--pearl-100); font-style:italic;}
+  .t-row .place{color:var(--moon-silver); font-size:14px; text-align:right;}
+  @media(max-width:700px){
+    .t-row{grid-template-columns:1fr; gap:4px;}
+    .t-row .place{text-align:left;}
+  }
+
+  /* ---------- contact ---------- */
+  .contact-wrap{display:grid; grid-template-columns:1fr 1fr; gap:80px;}
+  .contact-links a{
+    display:block; font-size:22px; font-weight:200; padding:16px 0;
+    border-bottom:1px solid var(--hair); transition:color .3s ease, padding-left .3s ease;
+  }
+  .contact-links a:hover{color:var(--shell-clay); padding-left:10px;}
+  form{display:flex; flex-direction:column; gap:14px;}
+  form input, form textarea{
+    background:var(--charcoal-900); border:1px solid var(--hair); border-radius:16px;
+    color:var(--pearl-100); font-family:inherit; font-size:15px; padding:14px 18px;
+    outline:none; transition:border-color .3s ease;
+  }
+  form input::placeholder, form textarea::placeholder{color:var(--moon-silver);}
+  form input:focus, form textarea:focus{border-color:var(--shell-clay);}
+  form button{
+    margin-top:16px; align-self:flex-start;
+    background:none; border:1px solid var(--pearl-60); color:var(--pearl-100);
+    padding:13px 36px; border-radius:999px;
+    font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+    cursor:pointer; transition:all .3s ease;
+  }
+  form button:hover{background:var(--shell-clay); color:var(--pearl-100); border-color:var(--shell-clay); transform:translateY(-2px);}
+  @media(max-width:800px){ .contact-wrap{grid-template-columns:1fr;} }
+
+  footer{
+    padding:40px 6vw; display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--hair); color:var(--moon-silver); font-size:12px; letter-spacing:.08em;
+    flex-wrap:wrap; gap:10px;
+  }
+
+  :focus-visible{ outline:1px solid var(--shell-clay); outline-offset:3px; }
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="moon-glow"></div>
+<div class="moon-glow two"></div>
+
+<header>
+  <div class="brand">Arian Alipour</div>
+  <button class="burger" id="burger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="nav-overlay" id="navOverlay">
+  <nav>
+    <a href="#artworks" class="nav-link">Artworks<span>SELECTED WORKS</span></a>
+    <a href="#about" class="nav-link">About<span>THE ARTIST</span></a>
+    <a href="#exhibitions" class="nav-link">Exhibitions<span>WHERE & WHEN</span></a>
+    <a href="#contact" class="nav-link">Contact<span>GET IN TOUCH</span></a>
+  </nav>
+</div>
+
+<section class="hero">
+  <video autoplay muted loop playsinline>
+    <source src="hero.mp4" type="video/mp4">
+  </video>
+  <div class="eyebrow">Painting — Drawing — Portfolio</div>
+  <h1>Arian <em>Alipour</em></h1>
+  <p>Hi, glad you're here. This is a collection of work that took shape slowly, under quiet light — have a look around.</p>
+  <div class="scroll-cue"><span>Scroll</span><div class="drop"></div></div>
+</section>
+
+<section id="artworks">
+  <div class="section-head">
+    <div>
+      <div class="tag">Selected Works</div>
+      <h2>Artworks</h2>
+    </div>
+    <div class="count" id="artCount">6 pieces</div>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="active" data-filter="all">All</button>
+    <button data-filter="forest-studies">Forest Studies <span class="num">I</span></button>
+    <button data-filter="figures">Figures <span class="num">II</span></button>
+    <button data-filter="ink-works">Ink Works <span class="num">III</span></button>
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="art" data-collection="forest-studies" data-title="Untitled I" data-year="2024 — Acrylic on canvas" style="--c1:#3a3530; --c2:#171719;"><div class="swatch"></div></div>
+    <div class="art" data-collection="figures" data-title="Pearl Night" data-year="2024 — Mixed media" style="--c1:#4a4038; --c2:#1c1c1e;"><div class="swatch"></div></div>
+    <div class="art" data-collection="ink-works" data-title="Moon Phase" data-year="2023 — Pencil drawing" style="--c1:#33383f; --c2:#161618;"><div class="swatch"></div></div>
+    <div class="art" data-collection="forest-studies" data-title="Shell and Claw" data-year="2023 — Watercolor" style="--c1:#3f342c; --c2:#19191b;"><div class="swatch"></div></div>
+    <div class="art" data-collection="figures" data-title="Low Tide" data-year="2022 — Acrylic on canvas" style="--c1:#37414a; --c2:#151517;"><div class="swatch"></div></div>
+    <div class="art" data-collection="ink-works" data-title="Untitled II" data-year="2022 — Mixed media" style="--c1:#453a30; --c2:#1a1a1c;"><div class="swatch"></div></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-head">
+    <div>
+      <div class="tag">Bio</div>
+      <h2>About</h2>
+    </div>
+  </div>
+  <div class="about-wrap">
+    <div class="orb"></div>
+    <div>
+      <p>I'm <strong>Arian Alipour</strong>. My work starts with looking closely at texture, shadow, and the quiet calm of charcoal greys — glad to share it with you.</p>
+      <p>This paragraph is a placeholder — replace it with a short note on your path as an artist, the techniques you keep coming back to, and what makes your work feel like yours. Two or three short paragraphs is plenty; a visitor should get a sense of who you are, quickly.</p>
+      <p>Education, awards, or a short CV can go here too, or link out to a downloadable PDF.</p>
+    </div>
+  </div>
+</section>
+
+<section id="exhibitions">
+  <div class="section-head">
+    <div>
+      <div class="tag">Timeline</div>
+      <h2>Exhibitions</h2>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="t-row"><div class="year">2024</div><div class="title">Group Show — Exhibition Title</div><div class="place">Gallery, City</div></div>
+    <div class="t-row"><div class="year">2023</div><div class="title">Solo Show — Exhibition Title</div><div class="place">Gallery, City</div></div>
+    <div class="t-row"><div class="year">2022</div><div class="title">Group Show — Exhibition Title</div><div class="place">Gallery, City</div></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-head">
+    <div>
+      <div class="tag">Get in touch</div>
+      <h2>Contact</h2>
+    </div>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-links">
+      <a href="mailto:your@email.com">your@email.com</a>
+      <a href="#">Instagram ↗</a>
+      <a href="#">Behance ↗</a>
+    </div>
+    <form>
+      <input type="text" placeholder="Your name" required>
+      <input type="email" placeholder="Email" required>
+      <textarea rows="4" placeholder="Message"></textarea>
+      <button type="submit">Send message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 — Arian Alipour</div>
+  <div>Charcoal · Pearl · Moonlight</div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lightboxClose">Close ✕</button>
+  <div class="frame">
+    <div class="swatch-big" id="lightboxSwatch"></div>
+    <div class="info">
+      <div class="n" id="lightboxTitle"></div>
+      <div class="y" id="lightboxYear"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const burger = document.getElementById('burger');
+  const overlay = document.getElementById('navOverlay');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    overlay.classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      burger.classList.remove('open');
+      overlay.classList.remove('open');
+    });
+  });
+
+  // collection filtering
+  const filterButtons = document.querySelectorAll('.filters button');
+  const artPieces = document.querySelectorAll('.art');
+  const artCount = document.getElementById('artCount');
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      let visible = 0;
+      artPieces.forEach(art => {
+        const match = filter === 'all' || art.dataset.collection === filter;
+        if(match){ art.classList.remove('hidden'); visible++; }
+        else { art.classList.add('hidden'); }
+      });
+      artCount.textContent = visible + (visible === 1 ? ' piece' : ' pieces');
+    });
+  });
+
+  // lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxSwatch = document.getElementById('lightboxSwatch');
+  const lightboxTitle = document.getElementById('lightboxTitle');
+  const lightboxYear = document.getElementById('lightboxYear');
+  artPieces.forEach(art => {
+    art.addEventListener('click', () => {
+      const c1 = art.style.getPropertyValue('--c1');
+      const c2 = art.style.getPropertyValue('--c2');
+      lightboxSwatch.style.background = `linear-gradient(160deg, ${c1}, ${c2} 60%, #101012)`;
+      lightboxTitle.textContent = art.dataset.title;
+      lightboxYear.textContent = art.dataset.year;
+      lightbox.classList.add('open');
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('open'); });
+</script>
+
+</body>
+</html>
