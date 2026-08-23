@@ -104,7 +104,7 @@
   .art{
     display:block; break-inside:avoid; margin-bottom:26px; position:relative; cursor:pointer;
   }
-  .art .swatch{ width:100%; aspect-ratio:4/5; background:linear-gradient(160deg, var(--c1), var(--c2) 65%, var(--paper-deep)); }
+  .art .swatch{ width:100%; aspect-ratio:4/5; background:var(--c1); }
   .art .art-img{ width:100%; height:auto; display:block; }
   .art .id-card{
     position:absolute; inset:auto 0 0 0; z-index:2; padding:16px 14px 12px;
@@ -133,7 +133,7 @@
   .detail-nav button:hover{ color:var(--ink); }
   .detail-body{ max-width:1040px; margin:0 auto; padding:40px 6vw 120px; display:grid; grid-template-columns:1.4fr 1fr; gap:56px; align-items:start; }
   .detail-image{ width:100%; position:relative; }
-  .detail-image .swatch-big{ width:100%; aspect-ratio:4/5; background:linear-gradient(160deg, var(--c1), var(--c2) 65%, var(--paper-deep)); }
+  .detail-image .swatch-big{ width:100%; aspect-ratio:4/5; background:var(--c1); }
   .detail-image img{ width:100%; height:auto; display:block; }
   .detail-info .collection-tag{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--clay); margin-bottom:12px; }
   .detail-info h3{ font-size:clamp(24px,3vw,36px); font-weight:200; font-style:italic; margin-bottom:16px; color:var(--ink); }
@@ -142,21 +142,9 @@
   .detail-info .meta-row span{ color:var(--ink); text-align:right; }
   @media(max-width:800px){ .detail-body{ grid-template-columns:1fr; gap:32px; } }
 
-  .about-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:start; }
-  .about-wrap .orb{
-    aspect-ratio:1; border-radius:58% 42% 46% 54% / 54% 46% 54% 46%;
-    background:radial-gradient(circle at 35% 30%, #F6F2EA, var(--clay) 50%, var(--olive) 100%);
-    max-width:320px; opacity:.9;
-    animation:blob-morph 16s ease-in-out infinite alternate;
-  }
-  @keyframes blob-morph{
-    0%{ border-radius:58% 42% 46% 54% / 54% 46% 54% 46%; }
-    50%{ border-radius:42% 58% 56% 44% / 46% 54% 46% 54%; }
-    100%{ border-radius:58% 42% 46% 54% / 54% 46% 54% 46%; }
-  }
-  .about-wrap p{color:var(--ink-soft); font-size:17px; margin-bottom:18px; max-width:520px;}
+  .about-wrap{ max-width:720px; }
+  .about-wrap p{color:var(--ink-soft); font-size:18px; line-height:1.85; margin-bottom:20px; max-width:680px;}
   .about-wrap strong{color:var(--ink); font-weight:400;}
-  @media(max-width:800px){ .about-wrap{grid-template-columns:1fr;} .about-wrap .orb{order:-1; margin:0 auto 20px;} }
 
   .timeline{border-top:1px solid var(--hair);}
   .t-row{ display:grid; grid-template-columns:110px 1fr 200px; gap:24px; padding:24px 0; border-bottom:1px solid var(--hair); align-items:baseline; }
@@ -235,7 +223,6 @@
 <section id="about">
   <div class="section-head"><div><div class="tag">Bio</div><h2>About</h2></div></div>
   <div class="about-wrap">
-    <div class="orb"></div>
     <div>
       <p>I'm <strong>Arian Alipour</strong>, a painter based in Tehran, Iran, and a graduate of Painting from the University of Science and Culture. My main practice is painting, but over the years I've explored different areas of visual art. I'm interested in exploring ideas through visual language and experimenting with different ways of making and seeing. Rather than limiting myself to one medium or a fixed way of working, I prefer to let each project find its own form.</p>
       <p>This portfolio brings together a selection of my paintings from different stages of my artistic journey. Rather than presenting them as isolated works, I see them as parts of a larger process — a collection of ideas, observations, experiments, and experiences that have gradually shaped the way I paint.</p>
